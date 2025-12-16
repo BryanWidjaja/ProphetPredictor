@@ -1,4 +1,6 @@
 fastapi
+h11
+click
 uvicorn
 prophet
 joblib

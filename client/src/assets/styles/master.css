@@ -1,0 +1,111 @@
+@font-face {
+  font-family: "Poppins";
+  src: url("../fonts/poppins/Poppins-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("../fonts/poppins/Poppins-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("../fonts/poppins/Poppins-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Laurentian Std";
+  src: url("../fonts/laurentian/Laurentian-SemiBold-Italic.otf")
+    format("opentype");
+  font-weight: 500;
+  font-style: italic;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #24272b;
+  --bg-dark: #1f2029;
+  --bg-darkest: #0d0f24;
+  --bg-lighter: #383b40;
+
+  --primary: #765bee;
+  --lightprimary: #8f79f6;
+
+  --primary-green: #21a558;
+  --primary-red: #ee4144;
+  --primary-lightgray: #b7bbbf;
+  --primary-gray: #78797e;
+
+  --text-default: #ffffff;
+  --text-lightgray: #787a84;
+  --text-gray: #525358;
+  --text-diluted: #ffffffd6;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-default);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  font-family: "Poppins", serif;
+  height: 100vh;
+  transition: all 0.5s;
+}
+
+html {
+  scroll-snap-type: y proximity;
+  scroll-behavior: smooth;
+}
+
+section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+a,
+button {
+  text-decoration: none;
+  font-family: inherit;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.main-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 87.5%;
+}
+
+.primary-btn {
+  background-color: var(--primary);
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.primary-btn:hover {
+  filter: brightness(110%);
+  cursor: pointer;
+}
