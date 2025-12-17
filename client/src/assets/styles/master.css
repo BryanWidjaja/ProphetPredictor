@@ -110,3 +110,10 @@ a:hover {
   filter: brightness(110%);
   cursor: pointer;
 }
+
+.h-line {
+  /* height: 0.1rem; */
+  border: 0.01rem solid var(--bg-lighter);
+  /* background-color: var(--bg-lighter); */
+  width: 50%;
+}

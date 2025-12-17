@@ -1,0 +1,21 @@
+.tutorial {
+  flex-direction: column;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+.tutorial-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 70%;
+}
+
+.tutorial-items {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  font-size: 1.1rem;
+}

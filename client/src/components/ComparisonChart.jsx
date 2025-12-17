@@ -1,10 +1,10 @@
 import {
+  ResponsiveContainer,
   ComposedChart,
   Line,
   XAxis,
   YAxis,
   Tooltip,
-  ResponsiveContainer,
   Legend,
 } from "recharts";
 
@@ -12,11 +12,12 @@ const theme = {
   axis: "#cbd5e1",
   tooltipBg: "#111827",
   tooltipText: "#f9fafb",
-  predict_line: "#765bee",
-  bound_line: "#b4a3ff",
+  actual_line: "#765bee",
+  predict_line: "#ee9f5b",
+  bound_line: "#ffcc95",
 };
 
-function ForecastChart({ data }) {
+function ComparisonChart({ data }) {
   return (
     <ResponsiveContainer width="100%" height={400}>
       <ComposedChart data={data}>
@@ -59,14 +60,25 @@ function ForecastChart({ data }) {
 
         <Line
           type="monotone"
-          dataKey="predicted"
-          stroke={theme.predict_line}
+          dataKey="actual"
+          stroke={theme.actual_line}
           strokeWidth={3}
           dot={false}
+          name="Actual"
+        />
+
+        <Line
+          type="monotone"
+          dataKey="predicted"
+          stroke={theme.predict_line}
+          strokeDasharray="4 4"
+          strokeWidth={3}
+          dot={false}
+          name="Predicted"
         />
       </ComposedChart>
     </ResponsiveContainer>
   );
 }
 
-export default ForecastChart;
+export default ComparisonChart;
