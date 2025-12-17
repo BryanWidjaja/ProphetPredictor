@@ -1,6 +1,7 @@
 fastapi
 h11
 click
+python-multipart
 uvicorn
 prophet
 joblib

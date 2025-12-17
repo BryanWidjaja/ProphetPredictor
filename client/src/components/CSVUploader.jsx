@@ -1,13 +1,16 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../assets/styles/csvuploader.css";
 
 function CSVUploader() {
   const fileInputRef = useRef(null);
+  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleFileSelect = () => {
-    fileInputRef.current.click();
+    if (!loading) fileInputRef.current.click();
   };
 
   const handleChange = (e) => {
@@ -16,13 +19,13 @@ function CSVUploader() {
   };
 
   const handleUpload = async () => {
-    if (!file) {
-      setStatus("No file selected");
-      return;
-    }
+    if (!file || loading) return;
 
     const formData = new FormData();
     formData.append("file", file);
+
+    setLoading(true);
+    setStatus("Training model...");
 
     try {
       const res = await fetch("http://localhost:8000/upload", {
@@ -30,11 +33,18 @@ function CSVUploader() {
         body: formData,
       });
 
-      if (!res.ok) throw new Error();
+      const data = await res.json();
 
-      setStatus("Upload successful");
+      if (!res.ok) {
+        setStatus(data.detail || "Upload failed");
+        setLoading(false);
+        return;
+      }
+
+      navigate("/result");
     } catch {
-      setStatus("Error uploading file");
+      setStatus("Cannot connect to server");
+      setLoading(false);
     }
   };
 
@@ -46,16 +56,21 @@ function CSVUploader() {
         accept=".csv"
         onChange={handleChange}
         hidden
+        disabled={loading}
       />
 
-      <div className="file-input-box" onClick={handleFileSelect}>
+      <div
+        className={`file-input-box ${loading ? "disabled" : ""}`}
+        onClick={handleFileSelect}
+      >
         {file ? file.name : "Click to select CSV file"}
       </div>
 
-      <button className="primary-btn" onClick={handleUpload}>
-        Upload CSV
+      <button className="primary-btn" onClick={handleUpload} disabled={loading}>
+        {loading ? "Processing..." : "Upload CSV"}
       </button>
 
+      {loading && <div className="spinner" />}
       <p className="status">{status}</p>
     </div>
   );
