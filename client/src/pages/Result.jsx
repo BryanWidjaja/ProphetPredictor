@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import Navbar from "../components/Navbar";
+import ForecastChart from "../components/ForecastChart";
 
 import "../assets/styles/result.css";
 
@@ -9,7 +10,7 @@ function Result() {
   const [error, setError] = useState("");
 
   const [selectedItem, setSelectedItem] = useState(null);
-  const [forecast, setForecast] = useState([]);
+  const [forecastData, setForecastData] = useState(null);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -33,7 +34,7 @@ function Result() {
 
   const handleClick = async (item) => {
     setSelectedItem(item);
-    setForecast([]);
+    setForecastData(null);
 
     try {
       const res = await fetch(
@@ -46,7 +47,7 @@ function Result() {
         return;
       }
 
-      setForecast(data);
+      setForecastData(data);
     } catch {
       setError("Cannot connect to server");
     }
@@ -73,16 +74,23 @@ function Result() {
         <div className="items-info-container">
           {!selectedItem && <p>Select an item</p>}
 
-          {selectedItem && (
+          {forecastData && (
             <>
-              <h2>{selectedItem} Forecast</h2>
+              <h2>{forecastData.product}</h2>
 
-              {forecast.map((row, idx) => (
-                <div key={idx} className="forecast-row">
-                  <span>{row.ds}</span>
-                  <span>{row.yhat.toFixed(2)}</span>
-                </div>
-              ))}
+              <ForecastChart data={forecastData.forecast} />
+
+              <div className="metrics">
+                <p>
+                  <strong>MAE:</strong> {forecastData.metrics.mae}
+                </p>
+                <p>
+                  <strong>RMSE:</strong> {forecastData.metrics.rmse}
+                </p>
+                <p>
+                  <strong>MAPE:</strong> {forecastData.metrics.mape}
+                </p>
+              </div>
             </>
           )}
         </div>
