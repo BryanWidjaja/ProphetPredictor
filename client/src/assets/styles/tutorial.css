@@ -1,8 +1,11 @@
 .tutorial {
-  flex-direction: column;
   gap: 1.5rem;
   flex-wrap: wrap;
-  align-content: center;
+  align-content: flex-start;
+  padding: 7.5vh 0;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-lighter) var(--bg);
 }
 
 .tutorial-container {
@@ -16,11 +19,19 @@
 .tutorial-items {
   display: flex;
   flex-direction: column;
-  width: 60%;
+  width: 55%;
   font-size: 1.1rem;
 }
 
 .inner-tutorial-container {
   padding-left: 1rem;
-  font-size: 0.75rem;
+}
+
+.inner-tutorial-container .tutorial-items {
+  font-size: 0.95rem;
+}
+
+.tutorial-desc {
+  width: 60%;
+  text-align: center;
 }
