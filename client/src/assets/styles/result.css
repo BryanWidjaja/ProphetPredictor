@@ -40,6 +40,7 @@
   align-items: center;
   gap: 1rem;
   overflow-y: scroll;
+  overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--bg-lighter) var(--bg);
 }
@@ -91,4 +92,29 @@
 .seasonalities {
   display: flex;
   gap: 2.5rem;
+}
+
+.view-switcher {
+  display: flex;
+  gap: 1rem;
+}
+
+.view-switcher button {
+  padding: 0.5rem 1rem;
+  background: var(--bg-lighter);
+  border: 1px solid var(--primary-gray);
+  color: var(--text-default);
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.view-switcher button.active {
+  background: var(--primary);
+  color: var(--text-default);
+  border-color: var(--primary);
+}
+
+.forecast-view {
+  width: 100%;
 }

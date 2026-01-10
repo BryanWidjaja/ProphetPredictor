@@ -32,17 +32,16 @@ function Tutorial() {
           <h1 className="tutorial-header">Evaluation Metrics</h1>
           <ol className="tutorial-items">
             <li className="tutorial-item">
-              MAE (Mean Absolute Error) : On average, the prediction is off by X
-              units
+              MAE (Mean Absolute Error): On average, the prediction is off by X
+              units.
             </li>
             <li className="tutorial-item">
-              RMSE (Root Mean Squared Error) : On average, the prediction is off
-              by X units, but large mistakes are penalized more heavily than
-              small ones
+              RMSE (Root Mean Squared Error): On average, the prediction is off
+              by X units, but large mistakes are penalized more than small ones.
             </li>
             <li className="tutorial-item">
-              MAPE (Mean Absolute Percentage Error) : On average, the prediction
-              is off by X percent
+              WAPE (Weighted Absolute Percentage Error): Out of all units sold,
+              the forecast was off by X%.
             </li>
           </ol>
         </div>

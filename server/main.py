@@ -83,16 +83,23 @@ def evaluate_model(model, ts):
     y_true = ts["y"].values
     y_pred = forecast["yhat"].values
 
-    mae = np.mean(np.abs(y_true - y_pred))
+    mask = y_true > 0
+
+    y_true = y_true[mask]
+    y_pred = y_pred[mask]
+
+    abs_errors = np.abs(y_true - y_pred)
+
+    mae = np.mean(abs_errors)
     rmse = np.sqrt(np.mean((y_true - y_pred) ** 2))
-    mape = np.mean(np.abs((y_true - y_pred) / y_true)) * 100
+    wape = np.sum(abs_errors) / np.sum(y_true) * 100
 
     return {
         "mae": round(float(mae), 2),
         "rmse": round(float(rmse), 2),
-        "mape": f"{round(float(mape), 2)}%"
+        "wape": f"{round(float(wape), 2)}%"
     }
-    
+
 @app.post("/upload")
 async def upload_csv(file: UploadFile = File(...)):
     df = pd.read_csv(file.file)
@@ -137,12 +144,7 @@ async def upload_csv(file: UploadFile = File(...)):
 
 @app.get("/data")
 def get_data():
-    return sorted({
-        item["product_name"]
-        for item in raw_rows
-        if "product_name" in item
-    })
-
+    return sorted(models.keys())
 
 @app.get("/")
 def health_check():
@@ -166,8 +168,14 @@ def forecast_product(product_name: str):
 
     forecast = model.predict(future)
 
+    forecast_tail = forecast.tail(MONTHS_AHEAD).copy()
+
+    forecast_tail["yhat"] = forecast_tail["yhat"].clip(lower=0)
+    forecast_tail["yhat_lower"] = forecast_tail["yhat_lower"].clip(lower=0)
+    forecast_tail["yhat_upper"] = forecast_tail["yhat_upper"].clip(lower=0)
+
     forecast_out = (
-        forecast.tail(MONTHS_AHEAD)[["ds", "yhat", "yhat_lower", "yhat_upper"]]
+        forecast_tail[["ds", "yhat", "yhat_lower", "yhat_upper"]]
         .assign(ds=lambda x: x["ds"].dt.strftime("%Y-%m-%d"))
         .round(0)
         .rename(columns={

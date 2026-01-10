@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import Navbar from "../components/Navbar";
 import ForecastChart from "../components/ForecastChart";
+import ForecastTable from "../components/ForecastTable";
 import ComparisonChart from "../components/ComparisonChart";
 
 import "../assets/styles/result.css";
@@ -9,6 +10,7 @@ import "../assets/styles/result.css";
 function Result() {
   const [items, setItems] = useState([]);
   const [error, setError] = useState("");
+  const [viewMode, setViewMode] = useState("table");
 
   const [selectedItem, setSelectedItem] = useState(null);
   const [forecastData, setForecastData] = useState(null);
@@ -118,7 +120,34 @@ function Result() {
             <>
               <h1 className="item-header">{forecastData.product}</h1>
 
-              <ForecastChart data={forecastData.forecast} />
+              <div className="view-switcher">
+                <button
+                  className={viewMode === "table" ? "active" : ""}
+                  onClick={() => setViewMode("table")}
+                >
+                  Table
+                </button>
+                <button
+                  className={viewMode === "chart" ? "active" : ""}
+                  onClick={() => setViewMode("chart")}
+                >
+                  Chart
+                </button>
+              </div>
+
+              <div className="forecast-view">
+                <div
+                  style={{ display: viewMode === "chart" ? "block" : "none" }}
+                >
+                  <ForecastChart data={forecastData.forecast} />
+                </div>
+
+                <div
+                  style={{ display: viewMode === "table" ? "block" : "none" }}
+                >
+                  <ForecastTable data={forecastData.forecast} />
+                </div>
+              </div>
 
               <hr className="h-line"></hr>
 
@@ -132,7 +161,7 @@ function Result() {
                     <strong>RMSE:</strong> {forecastData.metrics.rmse}
                   </p>
                   <p>
-                    <strong>MAPE:</strong> {forecastData.metrics.mape}
+                    <strong>WAPE:</strong> {forecastData.metrics.wape}
                   </p>
                 </div>
               </div>
