@@ -83,6 +83,10 @@
   color: inherit;
 }
 
+.items-searchbar:focus {
+  outline: 0.1rem solid var(--primary);
+}
+
 .seasonality-container {
   display: flex;
   flex-direction: column;
@@ -100,11 +104,11 @@
 }
 
 .view-switcher button {
-  padding: 0.5rem 1rem;
+  padding: 0.35rem 0.85rem;
   background: var(--bg-lighter);
   border: 1px solid var(--primary-gray);
   color: var(--text-default);
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   border-radius: 0.5rem;
   cursor: pointer;
 }

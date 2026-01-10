@@ -19,3 +19,8 @@
   width: 60%;
   font-size: 1.1rem;
 }
+
+.inner-tutorial-container {
+  padding-left: 1rem;
+  font-size: 0.75rem;
+}

@@ -15,18 +15,31 @@ function Result() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [forecastData, setForecastData] = useState(null);
   const [historyData, setHistoryData] = useState([]);
-  const [seasonality, setSeasonality] = useState(null);
 
   const [search, setSearch] = useState("");
+  const [sessionId, setSessionId] = useState(null);
 
   const filteredItems = items.filter((item) =>
     item.toLowerCase().includes(search.toLowerCase())
   );
 
   useEffect(() => {
+    const sid = localStorage.getItem("session_id");
+
+    if (!sid) {
+      setError("No active session. Please upload a CSV first.");
+      return;
+    }
+
+    setSessionId(sid);
+  }, []);
+
+  useEffect(() => {
+    if (!sessionId) return;
+
     const fetchItems = async () => {
       try {
-        const res = await fetch("http://localhost:8000/data");
+        const res = await fetch(`http://localhost:8000/data/${sessionId}`);
         const data = await res.json();
 
         if (!res.ok) {
@@ -41,14 +54,13 @@ function Result() {
     };
 
     fetchItems();
-  }, []);
+  }, [sessionId]);
 
   useEffect(() => {
     if (selectedItem && !filteredItems.includes(selectedItem)) {
       setSelectedItem(null);
       setForecastData(null);
       setHistoryData([]);
-      setSeasonality(null);
     }
   }, [search, filteredItems, selectedItem]);
 
@@ -56,27 +68,31 @@ function Result() {
     setSelectedItem(item);
     setForecastData(null);
     setHistoryData([]);
-    setSeasonality(null);
 
     try {
-      const [forecastRes, historyRes, seasonalityRes] = await Promise.all([
-        fetch(`http://localhost:8000/forecast/${encodeURIComponent(item)}`),
-        fetch(`http://localhost:8000/history/${encodeURIComponent(item)}`),
-        fetch(`http://localhost:8000/seasonality/${encodeURIComponent(item)}`),
+      const [forecastRes, historyRes] = await Promise.all([
+        fetch(
+          `http://localhost:8000/forecast/${sessionId}/${encodeURIComponent(
+            item
+          )}`
+        ),
+        fetch(
+          `http://localhost:8000/history/${sessionId}/${encodeURIComponent(
+            item
+          )}`
+        ),
       ]);
 
-      if (!forecastRes.ok || !historyRes.ok || !seasonalityRes.ok) {
+      if (!forecastRes.ok || !historyRes.ok) {
         setError("Failed to load data");
         return;
       }
 
       const forecastData = await forecastRes.json();
       const historyData = await historyRes.json();
-      const seasonalityData = await seasonalityRes.json();
 
       setForecastData(forecastData);
       setHistoryData(historyData.history);
-      setSeasonality(seasonalityData.seasonality);
     } catch {
       setError("Cannot connect to server");
     }
@@ -161,7 +177,7 @@ function Result() {
                     <strong>RMSE:</strong> {forecastData.metrics.rmse}
                   </p>
                   <p>
-                    <strong>WAPE:</strong> {forecastData.metrics.wape}
+                    <strong>MASE:</strong> {forecastData.metrics.mase}
                   </p>
                 </div>
               </div>
@@ -175,32 +191,6 @@ function Result() {
               <h2>Actual vs Predicted (Training Period)</h2>
               <ComparisonChart data={historyData} />
             </>
-          )}
-
-          <hr className="h-line"></hr>
-
-          {seasonality && (
-            <div className="seasonality-container">
-              <h2>Detected Seasonality</h2>
-
-              <div className="seasonalities">
-                <p>
-                  <strong>Data Frequency:</strong> {seasonality.frequency}
-                </p>
-                <p>
-                  <strong>Yearly Pattern:</strong>{" "}
-                  {seasonality.yearly ? "Yes" : "No"}
-                </p>
-                <p>
-                  <strong>Monthly Pattern:</strong>{" "}
-                  {seasonality.monthly ? "Yes" : "No"}
-                </p>
-                <p>
-                  <strong>Weekly Pattern:</strong>{" "}
-                  {seasonality.weekly ? "Yes" : "No"}
-                </p>
-              </div>
-            </div>
           )}
         </div>
       </section>

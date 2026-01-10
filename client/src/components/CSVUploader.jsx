@@ -21,25 +21,46 @@ function CSVUploader() {
   const handleUpload = async () => {
     if (!file || loading) return;
 
-    const formData = new FormData();
-    formData.append("file", file);
-
     setLoading(true);
-    setStatus("Training model...");
+    setStatus("Creating session...");
 
     try {
-      const res = await fetch("http://localhost:8000/upload", {
+      const sessionRes = await fetch("http://localhost:8000/session", {
         method: "POST",
-        body: formData,
       });
 
-      const data = await res.json();
+      const sessionData = await sessionRes.json();
 
-      if (!res.ok) {
+      if (!sessionRes.ok) {
+        setStatus("Failed to create session");
+        setLoading(false);
+        return;
+      }
+
+      const sessionId = sessionData.session_id;
+
+      setStatus("Uploading CSV...");
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const uploadRes = await fetch(
+        `http://localhost:8000/upload/${sessionId}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await uploadRes.json();
+
+      if (!uploadRes.ok) {
         setStatus(data.detail || "Upload failed");
         setLoading(false);
         return;
       }
+
+      localStorage.setItem("session_id", sessionId);
 
       navigate("/result");
     } catch {

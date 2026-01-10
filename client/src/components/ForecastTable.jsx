@@ -6,7 +6,7 @@ function ForecastTable({ data }) {
       <table>
         <thead>
           <tr>
-            <th className="header-column">Metric</th>
+            <th className="header-column">Metric \ Date</th>
             {data.map((d, i) => (
               <th key={i} className="date-column">
                 {d.date}

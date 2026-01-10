@@ -18,12 +18,12 @@ table {
   z-index: 1;
   border-right: 0.01rem solid var(--primary-gray);
   padding: 0.75rem 1rem;
+  padding-right: 0.25rem;
   text-align: left;
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--text-axis);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 .date-column {
@@ -33,7 +33,6 @@ table {
   text-align: center;
   font-size: 0.65rem;
   font-weight: 600;
-  white-space: nowrap;
 }
 
 .data-column {
@@ -49,5 +48,9 @@ table {
 }
 
 tbody tr:nth-child(-n + 2) .data-column {
+  border-bottom: 0.01rem solid var(--primary-gray);
+}
+
+thead .header-column:first-child {
   border-bottom: 0.01rem solid var(--primary-gray);
 }
