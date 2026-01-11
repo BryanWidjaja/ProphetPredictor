@@ -7,8 +7,10 @@
 
 # Server Run
 
-1. uv run uvicorn main:app --reload
+1. cd server
+2. uv run uvicorn main:app --reload
 
 # Client Start
 
-1. npm start
+1. cd client
+2. npm start

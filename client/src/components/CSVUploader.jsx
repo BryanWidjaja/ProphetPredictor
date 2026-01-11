@@ -39,7 +39,7 @@ function CSVUploader() {
 
       const sessionId = sessionData.session_id;
 
-      setStatus("Uploading CSV...");
+      setStatus("Training Model...");
 
       const formData = new FormData();
       formData.append("file", file);

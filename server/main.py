@@ -8,7 +8,7 @@ import numpy as np
 
 from prophet import Prophet
 
-app = FastAPI(title="CSV Upload Test API")
+app = FastAPI(title="ProphetPredictorBackend")
 
 sessions = {}
 
